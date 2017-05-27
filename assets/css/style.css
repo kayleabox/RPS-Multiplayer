@@ -1,0 +1,42 @@
+body{margin:30px;}
+
+form{
+	width:100%;
+}
+
+.jumbotron{
+	text-align: center;
+}
+
+.container{
+	width:100%;
+}
+
+.form-horizontal{
+	margin:0;
+}
+
+.form-group{
+	margin:0;
+ }
+
+#playerName{
+ 	width:400px;
+
+ }
+
+#gameStatus{
+	text-align: center;
+}
+
+#playerOption{
+	width: 200px;
+}
+
+#submitButton{
+
+}
+
+#submitInfo{
+	width: 100px;
+}

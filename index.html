@@ -1,37 +1,86 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title></title>
+    <title>Rock Paper Scissors!</title>
+    <!-- Latest compiled and minified CSS -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
+
 <body>
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Rock Paper Scissors!</h1>
+        </div>
 
-	<div id="container">
 
-		<div id="playerOne">
-			<h2>PLAYER ONE</h2>
-			<div id="playerOneName"></div>
-			<div><input id="playerOneGetName" type="text" placeholder="type name here"></input></div>
-
+        <div class="panel panel-default">
+  			<div class="panel-heading">
+    			<h3 class="panel-title">Player Information</h3>
+  			</div>
+	  		<div class="panel-body">
+	    		<form class="form-inline">
+		            <div class="form-group col-md-7">
+		                <label for="inputName" class="col-sm-2 control-label">name</label>
+		                <div class="col-sm-10">
+		                    <input type="name" class="form-control" id="playerName" placeholder="name">
+		                </div>
+		            </div>
+		            <div class="form-group dropdown col-md-3" id="menu">
+		                <button class="btn btn-default dropdown-toggle" type="button" id="playerOption" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+		                    options
+		                    <span class="caret"></span>
+		                </button>
+		                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+		                    <li value='r'><a href="#">elephant</a></li>
+		                    <li value='p'><a href="#">lion</a></li>
+		                    <li value='s'><a href="#">mouse</a></li>
+		                </ul>
+		            </div>
+		            <div class="form-group col-md-2" id="submitButton">
+		                <div class="col-sm-offset-2 col-sm-10">
+		                    <button id="submitInfo" type="submit" class="btn btn-default">submit</button>
+		                </div>
+		            </div>
+		        </form>
+	  		</div>
 		</div>
-		<div id="playerTwo">
-			<h2>PLAYER TWO</h2>
-			<div id="playerTwoName"></div>
-			<div><input id="playerTwoGetName" type="text" placeholder="type name here"></input></div>
-		</div>	
-
-		<div id="gameStatus"></div>
-	
-
-	</div>
 
 
-	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-
-	<script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
-
-	<script type="text/javascript" src="assets/javascript/app.js"></script>
-
-
-
+		<div class="panel panel-default">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">Game</h3>
+		  </div>
+		  <div class="panel-body">
+		    <div class="row">
+            <div id="playerOne" class="col-md-3">
+                <h3>PLAYER ONE</h3>
+                <div id="playerOneName"></div>
+                <div id="playerOneMove"></div>
+            </div>
+            <div id="gameStatus" class="col-md-6">
+                <div id="playerOneGif"></div>
+                <div id="playerTwoGif"></div>
+            </div>
+            <div id="playerTwo" class="col-md-3">
+                <h3>PLAYER TWO</h3>
+                <div id="playerTwoName"></div>
+                <div id="playerTwoMove"></div>
+            </div>
+        </div>
+    </div>
+		  </div>
+		</div>
+    
+       
+    <script type="text/javascript" src="assets/javascript/app.js"></script>
 </body>
+
 </html>
