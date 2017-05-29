@@ -55,8 +55,8 @@ var playerTwo = "";
 var playerOneMove = "";
 var playerTwoMove = "";
 var over = false;
-
-
+var playerOneTopic = "";
+var playerTwoTopic = "";
 
 
 database.ref("/game").on("child_added", function(childSnapshot) {
@@ -127,8 +127,7 @@ function setPlayerValues(){
       playerOne:playerOne,
       playerOneMove:playerOneMove,
     });
-    //var topic = $("#playerOption").text();
-    //getGif(topic);
+    playerOneTopic = $("#playerOption").text();
   }
   else if(playerTwo == ""){
     playerTwo = $("#playerName").val();
@@ -140,9 +139,7 @@ function setPlayerValues(){
       playerTwoMove: playerTwoMove,
     });
 
-    //topic = $("#playerOption").text();
-    //getGif(topic);
-    console.log("playerTwo= " + playerTwo);
+    playerTwoTopic = $("#playerOption").text();
   }
 }
 
@@ -158,7 +155,12 @@ $(document.body).on('click', '.dropdown-menu li', function (event) {
 
 $("#submitInfo").on("click", function(event){
     event.preventDefault();
-    $("#gameStatus").empty();
+
+    if(playerOne == ""){
+      $("#gameStatus").empty();
+      $("#playerOneName").empty();
+      $("#playerTwoName").empty();
+    }
 
     //set the value of player names and moves to form values when submit is clicked
     setPlayerValues();
@@ -166,12 +168,14 @@ $("#submitInfo").on("click", function(event){
     //resets menu name to options
     $("#playerOption").text("options").append('<span class="caret"></span>');
 
-    if(database.ref("/game").playerOneMove !== "" && database.ref("/game").playerTwoMove !== ""){
+    if(playerOneMove !== "" && playerTwoMove !== ""){
             // Creates an array that lists out all of the options (Rock, Paper, or Scissors).
       console.log("checking the game");
+      getGif(playerOneTopic);
+      getGif(playerTwoTopic);
 
 
-      //while( in options){
+
         if(playerOneMove === "r" && playerTwoMove === "s" || playerOneMove === "p" && playerTwoMove === "r" || playerOneMove === "s" && playerTwoMove === "p"){
           $("#gameStatus").append('<p>player one wins!</p>'+
           	'<p>player two loses!</p>');
@@ -199,12 +203,37 @@ $("#submitInfo").on("click", function(event){
           over = false;
         }
 
-
-      //}
     }
 
 });
 
 
+    function getGif(topic){
+        var queryUrl = "https://api.giphy.com/v1/gifs/search?q=" +
+            topic + "&api_key=dc6zaTOxFJmzC&limit=1&rating=pg";
+        console.log(queryUrl);
+        $.ajax({
+          url: queryUrl,
+          method: "GET"})
+        .done(function(response){
+          var results = response.data;
+          console.log(response);
 
+          
+          for(i=0; i<results.length; i++){
 
+                  var stillUrl = results[i].images.fixed_height_small_still.url;
+                  console.log(stillUrl);
+
+                  var animatedUrl = results[i].images.fixed_height_small.url;
+                  console.log(animatedUrl);
+
+                  var gifDiv = $('<div class="item" >');
+
+            gifDiv.prepend('<img class="giph" src="'+ animatedUrl +'" data-still="'+stillUrl+'" data-animate="'+animatedUrl+'" data-state="still">');
+
+            $("#gameStatus").append(gifDiv);
+          }
+
+        });
+      }
