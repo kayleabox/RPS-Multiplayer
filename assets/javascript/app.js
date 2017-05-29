@@ -1,4 +1,4 @@
- 
+
   // Initialize Firebase
   var config = {
     apiKey:      "AIzaSyDDgLAwZmXDJa0Z83d9Dnb9V5aIK6yKWfA",
@@ -54,22 +54,16 @@ var playerOne = "";
 var playerTwo = "";
 var playerOneMove = "";
 var playerTwoMove = "";
-var playerOneCount = 0;
-var playerTwoCount = 0;
+var over = false;
 
-database.ref().on("child_added", function(childSnapshot) {
 
-  //I am going to try to use the V.A.k.ba.key value
-  var child = childSnapshot;
-  /*console.log(child);
-  var id = child.A.k.ba.key;
-  console.log(id);*/
-//---------------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------
 
+
+database.ref("/game").on("child_added", function(childSnapshot) {
 
   // If Firebase has a highPrice and highBidder stored (first case)
-  if (childSnapshot.child("playerOne").exists() && childSnapshot.child("playerOneMove").exists()) {
+  if (childSnapshot.child("playerOne").exists() 
+    && childSnapshot.child("playerOneMove").exists()) {
 
     // Set the initial variables for highBidder equal to the stored values.
     playerOne = childSnapshot.val().playerOne; 
@@ -77,12 +71,12 @@ database.ref().on("child_added", function(childSnapshot) {
 
     // Change the HTML to reflect the initial value
     $("#playerOneName").html(playerOne);
-    $("#playerOneMove").html(playerOneMove);
+    //$("#playerOneMove").html(playerOneMove);
 
 
     // Print the initial data to the console.
-    console.log(childSnapshot.val().playerOne);
-    console.log(childSnapshot.val().playerOneMove);
+    console.log("childSnapshot playerOne" + childSnapshot.val().playerOne);
+    console.log("childSnapshot playerOneMove" + childSnapshot.val().playerOneMove);
 
   }
 
@@ -90,42 +84,31 @@ database.ref().on("child_added", function(childSnapshot) {
   else {
 
     // Change the HTML to reflect the initial value
-    $("#playerOneName").html(playerOne);
-    $("#playerOneMove").html(playerOneMove);
+    //$("#playerOneName").html(playerOne);
+    //$("#playerOneMove").html(playerOneMove);
 
-    // Print the initial data to the console.
-    console.log(playerOne);
-    console.log(playerOneMove);
+
+    // Change the HTML to reflect the initial value
+    //$("#playerTwoName").html(playerTwo);
+    //$("#playerTwoMove").html(playerTwoMove);
 
   }
 
-  if (childSnapshot.child("playerTwo").exists() && childSnapshot.child("playerTwoMove").exists()) {
-
-    // Set the initial variables for playerTwo
+  if(childSnapshot.child("playerTwo").exists() 
+    && childSnapshot.child("playerTwoMove").exists()){
+    // Change the HTML to reflect the initial value
+      // Set the initial variables for playerTwo
     playerTwo = childSnapshot.val().playerTwo; 
     playerTwoMove = childSnapshot.val().playerTwoMove; 
-
-    // Change the HTML to reflect the initial value
     $("#playerTwoName").html(playerTwo);
-    $("#playerTwoMove").html(playerTwoMove);
+   // $("#playerTwoMove").html(playerTwoMove);
 
 
     // Print the initial data to the console.
-    console.log(childSnapshot.val().playerTwo);
-    console.log(childSnapshot.val().playerTwoMove);
+    console.log("childSnapshot playerTwo" + childSnapshot.val().playerTwo);
+    console.log("childSnapshot playerTwoMove" + childSnapshot.val().playerTwoMove);
 
-  }
 
-  // Keep the initial variables for playerTwo
-  else {
-
-    // Change the HTML to reflect the initial value
-    $("#playerTwoName").html(playerTwo);
-    $("#playerTwoMove").html(playerTwoMove);
-
-    // Print the initial data to the console.
-    console.log(playerTwo);
-    console.log(playerTwoMove);
   }
 
 // If any errors are experienced, log them to console.
@@ -135,39 +118,31 @@ database.ref().on("child_added", function(childSnapshot) {
 
 
 function setPlayerValues(){
-  if (playerOneCount === playerTwoCount){
-    playerOne     = "";
-    playerOneMove = "";
-    playerTwo     = "";
-    playerTwoMove = "";
-  }
   if(playerOne == ""){
     playerOne = $("#playerName").val();
     playerOneMove = $("#playerOption").val();
-    console.log(playerOneMove);
     $("#playerName").val("");
     $("#playerOption").val("");
-    database.ref().push({
+    database.ref("/game").push({
       playerOne:playerOne,
-      playerOneMove:playerOneMove
+      playerOneMove:playerOneMove,
     });
-    var topic = $("#playerOption").text();
-    getGif(topic);
-    playerOneCount++;
+    //var topic = $("#playerOption").text();
+    //getGif(topic);
   }
   else if(playerTwo == ""){
     playerTwo = $("#playerName").val();
     playerTwoMove = $("#playerOption").val();
     $("#playerName").val("");
     $("#playerOption").val("");
-    database.ref().push({ 
+    database.ref("/game").push({ 
       playerTwo:playerTwo,
-      playerTwoMove: playerTwoMove
-    })
-    var topic = $("#playerOption").text();
-    getGif(topic);
+      playerTwoMove: playerTwoMove,
+    });
+
+    //topic = $("#playerOption").text();
+    //getGif(topic);
     console.log("playerTwo= " + playerTwo);
-    playerTwoCount++;
   }
 }
 
@@ -183,7 +158,7 @@ $(document.body).on('click', '.dropdown-menu li', function (event) {
 
 $("#submitInfo").on("click", function(event){
     event.preventDefault();
-
+    $("#gameStatus").empty();
 
     //set the value of player names and moves to form values when submit is clicked
     setPlayerValues();
@@ -191,7 +166,7 @@ $("#submitInfo").on("click", function(event){
     //resets menu name to options
     $("#playerOption").text("options").append('<span class="caret"></span>');
 
-    if(database.ref().playerOneMove !== "" && database.ref().playerTwoMove !== ""){
+    if(database.ref("/game").playerOneMove !== "" && database.ref("/game").playerTwoMove !== ""){
             // Creates an array that lists out all of the options (Rock, Paper, or Scissors).
       console.log("checking the game");
 
@@ -200,47 +175,36 @@ $("#submitInfo").on("click", function(event){
         if(playerOneMove === "r" && playerTwoMove === "s" || playerOneMove === "p" && playerTwoMove === "r" || playerOneMove === "s" && playerTwoMove === "p"){
           $("#gameStatus").append('<p>player one wins!</p>'+
           	'<p>player two loses!</p>');
+          over = true;      
         }
         else if(playerTwoMove === "r" && playerOneMove === "s" || playerTwoMove === "p" && playerOneMove === "r" || playerTwoMove === "s" && playerOneMove === "p"){
           $("#gameStatus").append('<p>player two wins!</p>'+
-          	'<p>player one loses!</p>');
+          	'<p>player one loses!</p>'); 
+          over= true;            
         }
         else if(playerTwoMove === "r" && playerOneMove === "r" || playerTwoMove === "p" && playerOneMove === "p" || playerTwoMove === "s" && playerOneMove === "s"){
-          $("#gameStatus").append("<p>it's a tie!</p>");
+          $("#gameStatus").append("<p>it's a tie!</p>"); 
+          over = true;            
         }
+
+        if (over){
+          /*$("#gameStatus").empty();
+          $("#playerOneName").empty();  
+          $("#playerTwoName").empty();*/
+          database.ref().child("/game").remove();
+          playerOne = "";
+          playerOneMove = "";
+          playerTwo = ""; 
+          playerTwoMove= "";   
+          over = false;
+        }
+
+
       //}
     }
 
 });
 
-    function getGif(topic){
-        var queryUrl = "https://api.giphy.com/v1/gifs/search?q=" +
-            topic + "&api_key=dc6zaTOxFJmzC&limit=1&rating=pg";
-        console.log(queryUrl);
-        $.ajax({
-          url: queryUrl,
-          method: "GET"})
-        .done(function(response){
-          var results = response.data;
-          console.log(response);
 
-          
-          for(i=0; i<results.length; i++){
-
-                  var stillUrl = results[i].images.fixed_height_small_still.url;
-                  console.log(stillUrl);
-
-                  var animatedUrl = results[i].images.fixed_height_small.url;
-                  console.log(animatedUrl);
-
-                  var gifDiv = $('<div class="item" >');
-
-            gifDiv.prepend('<img class="giph" src="'+ animatedUrl +'" data-still="'+stillUrl+'" data-animate="'+animatedUrl+'" data-state="still">');
-
-            $("#gameStatus").append(gifDiv);
-          }
-
-        });
-      }
 
 
