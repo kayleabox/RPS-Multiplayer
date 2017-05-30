@@ -159,7 +159,9 @@ $("#submitInfo").on("click", function(event){
     if(playerOne == ""){
       $("#gameStatus").empty();
       $("#playerOneName").empty();
+      $("#playerOneMove").empty();
       $("#playerTwoName").empty();
+      $("#playerTwoMove").empty();
     }
 
     //set the value of player names and moves to form values when submit is clicked
@@ -171,8 +173,8 @@ $("#submitInfo").on("click", function(event){
     if(playerOneMove !== "" && playerTwoMove !== ""){
             // Creates an array that lists out all of the options (Rock, Paper, or Scissors).
       console.log("checking the game");
-      getGif(playerOneTopic);
-      getGif(playerTwoTopic);
+      getGif(playerOneTopic, "#playerOneMove");
+      getGif(playerTwoTopic, "#playerTwoMove");
 
 
 
@@ -208,7 +210,7 @@ $("#submitInfo").on("click", function(event){
 });
 
 
-    function getGif(topic){
+    function getGif(topic, playerDiv){
         var queryUrl = "https://api.giphy.com/v1/gifs/search?q=" +
             topic + "&api_key=dc6zaTOxFJmzC&limit=1&rating=pg";
         console.log(queryUrl);
@@ -232,7 +234,7 @@ $("#submitInfo").on("click", function(event){
 
             gifDiv.prepend('<img class="giph" src="'+ animatedUrl +'" data-still="'+stillUrl+'" data-animate="'+animatedUrl+'" data-state="still">');
 
-            $("#gameStatus").append(gifDiv);
+            $(playerDiv).append(gifDiv);
           }
 
         });
